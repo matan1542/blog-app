@@ -1,0 +1,21 @@
+{
+  "8ce35d83-795c-4a43-8591-0ee2db93992d": {
+    "name": "omer weintroub",
+    "username": "omerwix123",
+    "password": "omerwix!123",
+    "email": "omerwe@wix.com",
+    "birthdate": "2022-05-05T00:00:00.000Z",
+    "likesArticlesIds": [
+      "b3813e27-2311-48e9-9e93-8c5c14133ec5",
+      "0e9b77b3-5453-49b6-8113-1755f844155f"
+    ]
+  },
+  "0dcb8463-bc88-4288-bee0-baf260fd62d6": {
+    "name": "matan lasry",
+    "username": "matanwix123",
+    "password": "matanwix!321",
+    "email": "matanls@wix.com",
+    "birthdate": "2022-05-05T00:00:00.000Z",
+    "likesArticlesIds": ["0e9b77b3-5453-49b6-8113-1755f844155f"]
+  }
+}
