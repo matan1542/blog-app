@@ -1,21 +1,21 @@
-import express from "express";
+import express, { Express, Request, Response, NextFunction } from "express";
 import bodyParser from "body-parser";
-import cors from 'cors';
+import cors from "cors";
 import dotenv from "dotenv";
-import menuItems from "./routes/menu-items.js";
+import postRouter from "./routes/post";
 dotenv.config();
 
-const app = express();
-const port = 3000;
+const app: Express = express();
+const port: number = 3000;
 
 app.use(express.json()); // Middleware for parsing JSON data
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors());
 
-app.use("/post", menuItems);
+app.use("/api/posts", postRouter);
 
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(404).send("<h1>Page not found</h1>");
 });
 

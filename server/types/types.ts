@@ -1,12 +1,14 @@
+import { ObjectId, UUID } from "mongodb";
+
 export type Post = {
-  postId?: string;
-  authorId?: string;
-  authorName: string;
+  _id?: ObjectId;
+  postId: string;
+  authorId: string;
   title: string;
   content: string;
   tags: string[];
   creationDate: string;
-  likedUsers?: string[];
+  likedUsers: string[];
 };
 export type User = {
   name: string;

@@ -1,0 +1,17 @@
+.createPostBtnContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  h2 {
+    font-size: 0.8125rem;
+  }
+  svg {
+    scale: 1.2;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  svg:hover {
+    fill: #242424;
+  }
+}
