@@ -11,8 +11,6 @@ const getPosts = async () => {
 };
 
 const createPost = async (newPost: Post) => {
-  console.log("newPost", newPost);
-
   const response = await axios.post(API_URL, newPost);
   return response.data;
 };
