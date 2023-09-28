@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import HomeHeader from "../../components/HomeHeader";
-import { postsMockData } from "../../mocks/mock";
+import HomeHeader from "../../components/Header";
+// import { postsMockData } from "../../mocks/mock";
 import { Post } from "../../types/types";
 import HomePageBody from "../../components/HomePageBody";
 import { getPosts } from "../../services/post.service";
@@ -26,7 +26,6 @@ const Home: FC = () => {
 
   return (
     <div>
-      <HomeHeader />
       <HomePageBody posts={posts} />
     </div>
   );

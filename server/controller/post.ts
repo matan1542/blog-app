@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { getCollection } from "../services/db.service";
 import { ObjectId } from "mongodb";
-import { Post } from "../types/types";
+import { FeedbackPost, Post } from "../types/types";
 
 export { getPosts, addPost };
 
@@ -21,12 +21,26 @@ const getPosts = async (req: Request, res: Response) => {
         $unwind: "$authorInfo",
       },
       {
+        $lookup: {
+          from: "post-feedback",
+          localField: "postId",
+          foreignField: "postId",
+          as: "feedbackInfo",
+        },
+      },
+      {
+        $unwind: "$feedbackInfo",
+      },
+      {
         $addFields: {
           authorName: "$authorInfo.name",
+          likedUsers: { $size: "$feedbackInfo.likedUsers" },
+          dislikedUsers: { $size: "$feedbackInfo.dislikedUsers" },
         },
       },
       {
         $project: {
+          feedbackInfo: 0,
           authorInfo: 0,
         },
       },
@@ -46,11 +60,20 @@ const addPost = async (req: Request, res: Response) => {
     content: req.body.content,
     creationDate: req.body.creationDate,
     tags: req.body.tags || [],
+    feedbackPostId: id.toString(),
+  };
+
+  const newPostFeedback: FeedbackPost = {
+    _id: id,
+    dislikedUsers: [],
     likedUsers: [],
+    postId: id.toString(),
   };
 
   const postsColl = await getCollection("posts");
+  const postsFeedbackColl = await getCollection("post-feedback");
   await postsColl.insertOne(newPost);
+  await postsFeedbackColl.insertOne(newPostFeedback);
   res.status(200).send({});
 };
 

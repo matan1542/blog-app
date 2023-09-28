@@ -6,14 +6,24 @@ export type Post = {
   content: string;
   tags: string[];
   creationDate: string;
-  likedUsers?: string[];
+  likedUsers?: number;
+  dislikedUsers?: number;
 };
+
 export type User = {
   name: string;
   username: string;
   password: string;
   email: string;
   favoriteTags: string[];
-  birthdate: string;
   likesArticlesIds: string[];
+  dislikedUsersIds: string[];
+};
+
+
+export type newUser = {
+  name: string;
+  username: string;
+  password: string;
+  email: string;
 };

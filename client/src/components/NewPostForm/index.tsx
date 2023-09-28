@@ -42,8 +42,8 @@ const NewPostForm = ({}) => {
       ...post,
       creationDate: new Date().toISOString(),
     };
-      
-    await createPost(currentPost)
+
+    await createPost(currentPost);
   };
 
   return (

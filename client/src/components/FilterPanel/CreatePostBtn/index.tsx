@@ -1,18 +1,16 @@
-import EditNoteIcon from "@mui/icons-material/EditNote";
-
-import style from "./style.module.scss";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const CreatePostBtn = () => {
+  const router = useNavigate();
+
+  const createPost = () => {
+    router("/new-post");
+  };
   return (
-    <Link
-      className={style.createPostBtnContainer}
-      to={"/new-post"}
-      style={{ textDecoration: "none", color: "inherit" }}
-    >
-      <EditNoteIcon />
-      <h2>Create</h2>
-    </Link>
+    <Button variant="contained" color="secondary" onClick={createPost}>
+      Create Post
+    </Button>
   );
 };
 
