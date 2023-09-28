@@ -1,4 +1,4 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import FilterPanel from "../FilterPanel";
 import style from "./style.module.scss";

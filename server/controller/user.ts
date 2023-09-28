@@ -24,7 +24,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
-  const { username, password, name, email, birthdate } = req.body;
+  const { username, password, name, email } = req.body;
 
   try {
     const users = await getCollection("users");
@@ -79,7 +79,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     // Create a JWT token
-    const token = jwt.sign({ userId: user.userId }, JWT_SECRET, {
+    const token = jwt.sign(user, JWT_SECRET, {
       expiresIn: "1h",
     });
 

@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { IconButton } from "@mui/material";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 
@@ -12,18 +13,32 @@ const LikesPanel: FC<{
   dislikedUsers: number;
   handleLike: handleLike;
   handleDislike: handleDislike;
-}> = ({ likedUsers, dislikedUsers, handleDislike, handleLike }) => {
-  //   const [likes, setLikes] = useState(0);
-  //   const [dislikes, setDislikes] = useState(0);
-
+  isLiked: boolean;
+  isDisliked: boolean;
+}> = ({
+  likedUsers,
+  dislikedUsers,
+  handleDislike,
+  handleLike,
+  isLiked,
+  isDisliked,
+}) => {
   return (
     <div>
       <IconButton onClick={handleLike} size="small" color="primary">
-        <ThumbUpOffAltIcon fontSize="small" />
+        {isLiked ? (
+          <ThumbUpIcon fontSize="small" />
+        ) : (
+          <ThumbUpOffAltIcon fontSize="small" />
+        )}
       </IconButton>
       {likedUsers}
       <IconButton onClick={handleDislike} size="small" color="secondary">
-        <ThumbDownOffAltIcon fontSize="small" />
+        {isDisliked ? (
+          <ThumbDownIcon fontSize="small" />
+        ) : (
+          <ThumbDownOffAltIcon fontSize="small" />
+        )}
       </IconButton>
       {dislikedUsers}
     </div>

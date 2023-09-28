@@ -1,26 +1,78 @@
 import { FC, useMemo, useState } from "react";
 import style from "./style.module.scss";
-import { Post } from "../../../../types/types";
+import { Post, User } from "../../../../types/types";
 import { Avatar, Chip } from "@mui/material";
+import jwt from "jsonwebtoken";
 import CircleSharpIcon from "@mui/icons-material/CircleSharp";
 import { v4 as uuidv4 } from "uuid";
 
 import { formatDate, stringAvatar } from "../../../../services/util.service";
 import LikesPanel from "../../../LikesPanel";
+import { dislikePost, likePost } from "../../../../services/post.service";
+import { useAuth } from "../../../Auth";
 const Card: FC<{ post: Post }> = ({ post }) => {
-  const { authorName, title, creationDate, tags, dislikedUsers, likedUsers } =
-    post;
-
+  const { isAuthenticated } = useAuth();
+  const {
+    authorId,
+    postId,
+    authorName,
+    title,
+    creationDate,
+    tags,
+    dislikedUsers,
+    likedUsers,
+    isLiked,
+    isDisliked,
+  } = post;
   const [likes, setLikes] = useState(likedUsers);
   const [dislikes, setDisLikes] = useState(dislikedUsers);
-  const [isLiked, setIsLiked] = useState(false);
-  const likeNumber = useMemo(() => {
-    return;
-  }, [post]);
+  const [isUserLiked, setIsUserLiked] = useState(isLiked && isAuthenticated);
+  const [isUserDisLiked, setIsUserDisLiked] = useState(
+    isDisliked && isAuthenticated
+  );
 
-  const handleLike = () => {};
+  // const [isLiked, setIsLiked] = useState(false);
+  const handleLike = async () => {
+    if (!isAuthenticated) return;
 
-  const handleDislike = () => {};
+    if (isUserLiked) {
+      // If the user has already liked the post, remove the like
+      setLikes((prevLikes) => (prevLikes as number) - 1);
+      setIsUserLiked(false);
+    } else {
+      // If the user hasn't liked the post, add the like and remove the dislike
+      setLikes((prevLikes) => (prevLikes as number) + 1);
+      setIsUserLiked(true);
+
+      if (isUserDisLiked) {
+        setDisLikes((prevDislikes) => (prevDislikes as number) - 1);
+        setIsUserDisLiked(false);
+      }
+    }
+
+    await likePost(postId as string);
+  };
+
+  const handleDislike = async () => {
+    if (!isAuthenticated) return;
+
+    if (isUserDisLiked) {
+      // If the user has already disliked the post, remove the dislike
+      setDisLikes((prevDislikes) => (prevDislikes as number) - 1);
+      setIsUserDisLiked(false);
+    } else {
+      // If the user hasn't disliked the post, add the dislike and remove the like
+      setDisLikes((prevDislikes) => (prevDislikes as number) + 1);
+      setIsUserDisLiked(true);
+
+      if (isUserLiked) {
+        setLikes((prevLikes) => (prevLikes as number) - 1);
+        setIsUserLiked(false);
+      }
+    }
+
+    await dislikePost(postId as string);
+  };
 
   return (
     <div className={style.cardContainer}>
@@ -45,8 +97,10 @@ const Card: FC<{ post: Post }> = ({ post }) => {
         <LikesPanel
           handleLike={handleLike}
           handleDislike={handleDislike}
-          dislikedUsers={dislikedUsers as number}
-          likedUsers={likedUsers as number}
+          isLiked={isUserLiked as boolean}
+          isDisliked={isUserDisLiked as boolean}
+          dislikedUsers={dislikes as number}
+          likedUsers={likes as number}
         />
         {tags.length ? (
           <>
