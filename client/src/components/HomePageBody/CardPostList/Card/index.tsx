@@ -10,6 +10,7 @@ import { formatDate, stringAvatar } from "../../../../services/util.service";
 import LikesPanel from "../../../LikesPanel";
 import { dislikePost, likePost } from "../../../../services/post.service";
 import { useAuth } from "../../../Auth";
+import { useNavigate } from "react-router-dom";
 const Card: FC<{ post: Post }> = ({ post }) => {
   const { isAuthenticated } = useAuth();
   const {
@@ -24,12 +25,17 @@ const Card: FC<{ post: Post }> = ({ post }) => {
     isLiked,
     isDisliked,
   } = post;
+  const router = useNavigate();
   const [likes, setLikes] = useState(likedUsers);
   const [dislikes, setDisLikes] = useState(dislikedUsers);
   const [isUserLiked, setIsUserLiked] = useState(isLiked && isAuthenticated);
   const [isUserDisLiked, setIsUserDisLiked] = useState(
     isDisliked && isAuthenticated
   );
+
+  const clickedPost = () => {
+    router(`/${postId}`);
+  };
 
   // const [isLiked, setIsLiked] = useState(false);
   const handleLike = async () => {
@@ -75,7 +81,7 @@ const Card: FC<{ post: Post }> = ({ post }) => {
   };
 
   return (
-    <div className={style.cardContainer}>
+    <div className={style.cardContainer} onClick={clickedPost}>
       <div className={style.cardOwnerContainer}>
         <Avatar {...stringAvatar(authorName)} />
         <h2>{authorName}</h2>

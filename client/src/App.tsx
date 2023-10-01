@@ -9,6 +9,7 @@ import { useAuth } from "./components/Auth";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Header from "./components/Header";
+import CardPreview from "./pages/CardPreview";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -29,6 +30,7 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/:postId" element={<CardPreview />} />
         </Routes>
       </BrowserRouter>
     </div>

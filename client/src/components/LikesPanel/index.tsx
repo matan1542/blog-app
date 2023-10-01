@@ -25,7 +25,14 @@ const LikesPanel: FC<{
 }) => {
   return (
     <div>
-      <IconButton onClick={handleLike} size="small" color="primary">
+      <IconButton
+        onClick={(ev) => {
+          ev.stopPropagation();
+          handleLike();
+        }}
+        size="small"
+        color="primary"
+      >
         {isLiked ? (
           <ThumbUpIcon fontSize="small" />
         ) : (
@@ -33,7 +40,14 @@ const LikesPanel: FC<{
         )}
       </IconButton>
       {likedUsers}
-      <IconButton onClick={handleDislike} size="small" color="secondary">
+      <IconButton
+        onClick={(ev) => {
+          ev.stopPropagation();
+          handleDislike();
+        }}
+        size="small"
+        color="secondary"
+      >
         {isDisliked ? (
           <ThumbDownIcon fontSize="small" />
         ) : (

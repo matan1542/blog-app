@@ -4,7 +4,9 @@ import { ObjectId } from "mongodb";
 import jwt from "jsonwebtoken";
 import { FeedbackPost, Post } from "../types/types";
 
-export { getPosts, addPost, addLike, addDislike };
+export { getPosts, addPost, addLike, addDislike, getTags, getPost };
+type filtersProps = { postId: string };
+type queryFiltersProps = ({ postId }: filtersProps) => void;
 
 const addLike = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
@@ -117,6 +119,9 @@ const addDislike = async (req: Request, res: Response) => {
 };
 
 const getPosts = async (req: Request, res: Response) => {
+  let filters = queryFiltes(req.params as filtersProps);
+  console.log("filters", filters);
+
   const authHeader = req.headers.authorization;
   const user = authHeader
     ? jwt.verify(authHeader, process.env.JWT_SECRET)
@@ -149,6 +154,9 @@ const getPosts = async (req: Request, res: Response) => {
   const postsColl = await getCollection("posts");
   const posts = await postsColl
     .aggregate([
+      {
+        $match: filters, // Your filtering conditions go here
+      },
       {
         $lookup: {
           from: "users",
@@ -223,6 +231,23 @@ const addPost = async (req: Request, res: Response) => {
   res.status(200).send({});
 };
 
+const getTags = async (req: Request, res: Response) => {
+  const postsColl = await getCollection("posts");
+  const posts = (await postsColl.find({}).toArray()) as unknown as Post[];
+  const tags = posts.reduce((acc, post) => {
+    return [...acc, ...post.tags];
+  }, []);
+  const uniqueTags = [...new Set(tags)];
+  res.send(uniqueTags);
+};
+
+const getPost = async (req: Request, res: Response) => {
+  const postId = req.params.postId;
+  const postsColl = await getCollection("posts");
+  const post = await postsColl.findOne({ postId });
+  res.send(post);
+};
+
 // const getPost = (req, res, next) => {
 //   fs.readFile("data/menu-items.json", "utf8", (err, data) => {
 //     if (err) throw new Error(err);
@@ -244,3 +269,11 @@ const addPost = async (req: Request, res: Response) => {
 //     }
 //   });
 // };
+
+const queryFiltes: queryFiltersProps = ({ postId }) => {
+  const filters = {};
+  if (postId) {
+    filters["postId"] = postId;
+  }
+  return filters;
+};
