@@ -1,28 +1,38 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
-import HomeHeader from "./components/HomeHeader";
 import NewPost from "./pages/NewPost";
 
 import style from "./styles/app.style.module.scss";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/new-post",
-    element: <NewPost />,
-  },
-]);
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "./components/Auth";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
+import Header from "./components/Header";
+import CardPreview from "./pages/CardPreview";
 
 function App() {
+  const { isAuthenticated } = useAuth();
   return (
     <div className={style.appContainer}>
-      <>
-        <RouterProvider router={router} />
-      </>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/new-post"
+            element={
+              <ProtectedRoute
+                element={<NewPost />}
+                isAuthenticated={isAuthenticated}
+              />
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/:postId" element={<CardPreview />} />
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }

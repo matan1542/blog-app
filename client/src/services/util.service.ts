@@ -26,7 +26,7 @@ export function stringAvatar(name: string) {
       height: 30,
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: name.length > 1 ? `${name[0]}${name[1]}` : `${name[0]}`,
   };
 }
 
